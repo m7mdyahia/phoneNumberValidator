@@ -1,13 +1,13 @@
-package com.jumia.group.phonenumbervalidtor;
+package com.example.phonenumbervalidtor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PhoneNumberValidtorApplication {
+public class PhoneNumberValidatorApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PhoneNumberValidtorApplication.class, args);
+        SpringApplication.run(PhoneNumberValidatorApplication.class, args);
     }
 
 }

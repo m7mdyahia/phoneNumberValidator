@@ -1,0 +1,11 @@
+server:
+  port: 12345
+spring:
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        dialect: com.enigmabridge.hibernate.dialect.SQLiteDialect
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    jdbcUrl: jdbc:sqlite:sample.db
