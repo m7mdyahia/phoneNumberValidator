@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("customer")
+@RequestMapping("api/customer")
 public class CustomerController {
 
     @Autowired
@@ -22,7 +22,7 @@ public class CustomerController {
     public List<Customer> findAll() {
         return customerService.findAll();
     }
-    @GetMapping
+    @GetMapping("/search")
     public List<Customer> findByCountry(@RequestParam Country country) {
         return customerService.findByCountry(country);
     }
