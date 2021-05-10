@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 @Value
 public class Country {
+    int id;
     int code;
     @EqualsAndHashCode.Exclude
     @NotNull
@@ -17,7 +18,8 @@ public class Country {
     @JsonIgnore
     Pattern phonePattern;
 
-    public Country(int code, @NotNull String name, @NotNull String phonePattern) {
+    public Country(int id,int code, @NotNull String name, @NotNull String phonePattern) {
+        this.id = id;
         this.code = code;
         this.name = name;
         this.phonePattern = Pattern.compile(phonePattern);

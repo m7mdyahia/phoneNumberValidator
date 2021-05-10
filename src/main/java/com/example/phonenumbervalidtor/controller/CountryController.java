@@ -1,22 +1,25 @@
 package com.example.phonenumbervalidtor.controller;
 
-import com.example.phonenumbervalidtor.dao.entity.CountryEntity;
-import com.example.phonenumbervalidtor.dao.repository.CountryRepository;
+import com.example.phonenumbervalidtor.model.Country;
+import com.example.phonenumbervalidtor.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/country")
 public class CountryController {
 
     @Autowired
-    CountryRepository countryRepository;
+    CountryService countryService;
+
 
     @GetMapping
-    public Iterable<CountryEntity> findAllCountries() {
-        return countryRepository.findAll();
+    public List<Country> findAllCountries() {
+        return countryService.getCountryList();
     }
 
 }

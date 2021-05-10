@@ -9,6 +9,8 @@ import org.springframework.lang.Nullable;
 @Builder
 public class PhoneNumber {
     @NotNull
+    private final String fullNumber ;
+    @Nullable
     private final String number ;
     @Nullable
     private final Country country ;

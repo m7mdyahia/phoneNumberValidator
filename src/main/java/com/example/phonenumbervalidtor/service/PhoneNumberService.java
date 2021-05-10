@@ -1,48 +1,47 @@
 package com.example.phonenumbervalidtor.service;
 
-import com.example.phonenumbervalidtor.dao.entity.CountryEntity;
-import com.example.phonenumbervalidtor.dao.repository.CountryRepository;
 import com.example.phonenumbervalidtor.model.Country;
 import com.example.phonenumbervalidtor.model.PhoneNumber;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class PhoneNumberService {
 
-    private static List<Country> COUNTRIES = new ArrayList<>();
-
     @Autowired
-    CountryRepository countryDAO;
-    @Autowired
-    CountryMapper countryMapper;
-
-    @PostConstruct
-    private void initializeCountries() {
-        ArrayList<CountryEntity> countryEntities = new ArrayList<>();
-        countryDAO.findAll().forEach(countryEntities::add);
-        COUNTRIES = countryMapper.countryEntitiesToCountries(countryEntities);
-    }
-
+    CountryService countryService;
+    Pattern PHONE_NUMBER_PATTERN = Pattern.compile("\\((\\d+)\\)\\s?(.+)");
 
     public PhoneNumber getPhoneNumberFromPhoneString(@NotNull String phoneString) {
-        Optional<Country> countryOptional = COUNTRIES
-                .stream()
-                .filter(country -> country.getPhonePattern().matcher(phoneString).matches())
-                .findAny();
-        return PhoneNumber
+        PhoneNumber.PhoneNumberBuilder builder = PhoneNumber
                 .builder()
-                .number(phoneString)
-                .valid(countryOptional.isPresent())
-                .country(countryOptional.orElse(null))
-                .build();
-
+                .fullNumber(phoneString);
+        int countryCode;
+        Matcher matcher = PHONE_NUMBER_PATTERN.matcher(phoneString);
+        if (matcher.matches()) {
+            countryCode = Integer.parseInt(matcher.group(1));
+            Country country = countryService.getCountryByCode(countryCode);
+            builder.country(country);
+            builder.number(matcher.group(2));
+            if (country != null) {
+                builder.valid(isPhoneNumberValidForCountry(phoneString, country));
+            } else {
+                builder.valid(false);
+            }
+        } else {
+            builder.valid(false);
+        }
+        return builder.build();
     }
+
+    public static boolean isPhoneNumberValidForCountry(@NotNull String phoneNumber,
+                                                @NotNull Country country) {
+        return country.getPhonePattern().matcher(phoneNumber).matches();
+    }
+
 
 }

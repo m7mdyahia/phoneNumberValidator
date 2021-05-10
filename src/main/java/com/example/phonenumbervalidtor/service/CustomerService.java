@@ -4,11 +4,16 @@ import com.example.phonenumbervalidtor.dao.entity.CustomerEntity;
 import com.example.phonenumbervalidtor.dao.repository.CustomerRepository;
 import com.example.phonenumbervalidtor.model.Country;
 import com.example.phonenumbervalidtor.model.Customer;
+import com.example.phonenumbervalidtor.model.CustomerSearchCriteria;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -16,6 +21,8 @@ public class CustomerService {
     CustomerRepository customerRepository;
     @Autowired
     PhoneNumberService phoneNumberService;
+    @Autowired
+    CountryService countryService;
 
     public List<Customer> findAll() {
         return getCustomersListFromCustomerEntities(customerRepository.findAll());
@@ -32,5 +39,18 @@ public class CustomerService {
                     phoneNumberService.getPhoneNumberFromPhoneString(customerEntity.getPhone())));
         }
         return customers;
+    }
+
+    public List<Customer> findByCustomerSearchCriteria(@NotNull CustomerSearchCriteria customerSearchCriteria) {
+
+        return customerSearchCriteria
+                .getSelectedCountries()
+                .stream()
+                .map(countryService::getCountryById)
+                .filter(Objects::nonNull)
+                .map(this::findByCountry)
+                .flatMap(Collection::stream)
+                .filter(customer -> customerSearchCriteria.getSelectedStatuses().stream().anyMatch(b -> b == customer.getPhone().isValid()))
+                .collect(Collectors.toList());
     }
 }
