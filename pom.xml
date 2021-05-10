@@ -175,7 +175,32 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>Copy DB</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <includes>
+                                        <include>sample.db</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <workingDirectory>target</workingDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
