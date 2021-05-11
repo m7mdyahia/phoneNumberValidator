@@ -58,22 +58,22 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="customer in customers" :key="customer.phone.number">
-            <td>{{ customer.phone.fullNumber }}</td>
+          <tr v-for="phone in phones" :key="phone.number">
+            <td>{{ phone.fullNumber }}</td>
             <td>
-              <template v-if="customer.phone.country">
-                {{ customer.phone.country.name }}
+              <template v-if="phone.country">
+                {{ phone.country.name }}
               </template>
             </td>
-            <td :class="{red:!customer.phone.valid}">
-              {{ customer.phone.valid ? 'valid' : 'invalid' }}
+            <td :class="{red:!phone.valid}">
+              {{ phone.valid ? 'valid' : 'invalid' }}
             </td>
             <td>
-              <template v-if="customer.phone.country">
-                {{ customer.phone.country.code }}
+              <template v-if="phone.country">
+                {{ phone.country.code }}
               </template>
             </td>
-            <td>{{ customer.phone.number }}</td>
+            <td>{{ phone.number }}</td>
           </tr>
           </tbody>
         </table>
@@ -91,7 +91,7 @@ export default {
   name: 'HelloWorld',
   data() {
     return {
-      customers: {},
+      phones: {},
       countries: {},
       statuses: [
         {
@@ -112,7 +112,7 @@ export default {
       let selectedStatuses = this.statuses.filter(c => c.checked).map(c => c.value)
       let data = {selectedCountries:selectedCountries,selectedStatuses:selectedStatuses};
       console.log(data);
-      fetch('/api/customer/search', {
+      fetch('/api/phoneNumber/search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -121,15 +121,15 @@ export default {
       })
           .then(response => response.json())
           .then(data => {
-            this.customers = data;
+            this.phones = data;
           });
     }
   },
   mounted() {
-    fetch("/api/customer")
+    fetch("/api/phoneNumber")
         .then(response => response.json())
         .then(data => {
-          this.customers = data;
+          this.phones = data;
         });
     fetch("/api/country")
         .then(response => response.json())

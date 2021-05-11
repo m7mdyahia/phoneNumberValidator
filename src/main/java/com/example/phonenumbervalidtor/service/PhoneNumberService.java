@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 public class PhoneNumberService {
 
     @Autowired
-    CountryService countryService;
-    Pattern PHONE_NUMBER_PATTERN = Pattern.compile("\\((\\d+)\\)\\s?(.+)");
+    private CountryService countryService;
+    private final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("\\((\\d+)\\)\\s?(.+)");
 
     public PhoneNumber getPhoneNumberFromPhoneString(@NotNull String phoneString) {
         PhoneNumber.PhoneNumberBuilder builder = PhoneNumber

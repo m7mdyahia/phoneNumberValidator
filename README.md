@@ -13,6 +13,11 @@ Diplaying usage of spring Boot with Vue.js
 ### Other libraries  
 * Lombok
 * Mapstruct
+
+### Unit testing
+* Junit 
+* SpringBootTest
+
 ## Front End
 * Vue.js (3)
 * Bootstrap 5
@@ -20,8 +25,8 @@ Diplaying usage of spring Boot with Vue.js
 Packaged as single jar, Embedded Tomcat will serve both spring and Vue project from static files  
 Using frontend-maven-plugin
 
-## USage 
+## Usage 
 * mvn clean package
-*  cd target
+* cd target
 * java -jar phoneNumberValidtor-0.0.1-SNAPSHOT.jar
 * open http://localhost:12345/

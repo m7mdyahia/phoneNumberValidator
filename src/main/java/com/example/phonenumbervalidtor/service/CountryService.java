@@ -19,43 +19,55 @@ import java.util.stream.Collectors;
 @Service
 public class CountryService {
     @NotNull
-    private  List<Country> countryList = new ArrayList<>();
+    private List<Country> countryList = new ArrayList<>();
     @NotNull
-    private  Map<Integer, Country> countryCodeMap = new HashMap<>();
-    private  Map<Integer, Country> countryIdMap = new HashMap<>();
+    private Map<Integer, Country> countryCodeMap = new HashMap<>();
+    @NotNull
+    private Map<Integer, Country> countryIdMap = new HashMap<>();
 
     @Autowired
-    CountryRepository countryDAO;
-
+    CountryRepository countryRepo;
     @Autowired
     CountryMapper countryMapper;
 
     @PostConstruct
-    private void initializeCountries() {
-        ArrayList<CountryEntity> countryEntities = new ArrayList<>();
-        countryDAO.findAll().forEach(countryEntities::add);
-        countryList = countryMapper.countryEntitiesToCountries(countryEntities);
+    public void initializeCountries() {
+        countryList = getCountriesFromRepo();
+        countryCodeMap = getCountryCodeMapFromCountryList(countryList);
+        countryIdMap = getCountryIdMap(countryList);
+    }
 
-        countryCodeMap = countryList
-                .stream()
-                .collect(Collectors.toMap(Country::getCode, Function.identity()));
-        countryIdMap = countryList
-                .stream()
-                .collect(Collectors.toMap(Country::getId, Function.identity()));
+    public List<Country> getCountriesFromRepo() {
+        ArrayList<CountryEntity> countryEntities = new ArrayList<>();
+        countryRepo.findAll().forEach(countryEntities::add);
+        return countryMapper.countryEntitiesToCountries(countryEntities);
     }
 
     @Nullable
-    public Country getCountryByCode(int code)
-    {
+    public Country getCountryByCode(int code) {
         return countryCodeMap.get(code);
     }
+
     @Nullable
-    public Country getCountryById(int code)
-    {
-        return countryIdMap.get(code);
+    public Country getCountryById(int id) {
+        return countryIdMap.get(id);
     }
 
-    public List<Country> getCountryList() {
+    public @NotNull List<Country> getCountryList() {
         return countryList;
+    }
+
+    @NotNull
+    public Map<Integer, Country> getCountryCodeMapFromCountryList(@NotNull List<Country> countryList) {
+        return countryList
+                .stream()
+                .collect(Collectors.toMap(Country::getCode, Function.identity()));
+    }
+
+    @NotNull
+    public Map<Integer, Country> getCountryIdMap(@NotNull List<Country> countryList) {
+        return countryList
+                .stream()
+                .collect(Collectors.toMap(Country::getId, Function.identity()));
     }
 }
