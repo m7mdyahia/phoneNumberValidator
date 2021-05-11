@@ -17,7 +17,7 @@ class CountryTest {
     @Test
     void testInvalidConstructor()
     {
-        assertThrows(IllegalArgumentException.class,()->new Country(1, 237, "Cameroon", null));
+        assertThrows(Throwable.class,()->new Country(1, 237, "Cameroon", null));
 
     }
 
